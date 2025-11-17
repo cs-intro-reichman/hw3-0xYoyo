@@ -25,35 +25,53 @@ public class Algebra {
 
 	// Returns x1 + x2
 	public static int plus(int x1, int x2) {
-		// This implementation is correct for non-negative x2.
-		for (int i = 0; i < x2; i++) {
-			x1++;
+		if (x2 < 0) {
+			for (int i = 0; i > x2; i--) {
+				x1--;
+			}
+		} else {
+			for (int i = 0; i < x2; i++) {
+				x1++;
+			}
 		}
 		return x1;
 	}
 
 	// Returns x1 - x2
 	public static int minus(int x1, int x2) {
-		// This implementation is correct for non-negative x2.
-		for (int i = 0; i < x2; i++) {
-			x1--;
+		if (x2 < 0) {
+			for (int i = 0; i > x2; i--) {
+				x1++;
+			}
+		} else {
+			for (int i = 0; i < x2; i++) {
+				x1--;
+			}
 		}		
 		return x1;
 	}
 
 	// Returns x1 * x2
 	public static int times(int x1, int x2) {
-		// Assuming x2 >= 0
+		if (x1 == 0 || x2 == 0) {
+			return 0;
+		}
+		
 		int total = 0;
-		for (int i = 0; i < x2; i++) {
-			total = plus(total, x1);
+		if (x2 > 0) {
+			for (int i = 0; i < x2; i++) {
+				total = plus(total, x1);
+			}
+		} else { 
+			for (int i = 0; i > x2; i--) {
+				total = minus(total, x1);
+			}
 		}
 		return total;
 	}
 
 	// Returns x^n (for n >= 0)
 	public static int pow(int x, int n) {
-		// Assuming n >= 0
 		int total = 1;
 		for (int i = 0; i < n; i++) {
 			total = times(total, x);
@@ -63,20 +81,34 @@ public class Algebra {
 
 	// Returns the integer part of x1 / x2 
 	public static int div(int x1, int x2) {
-		// Assuming x1 >= 0 and x2 > 0
+		if (x2 == 0) {
+			return 0; // Assuming no error handling as per instructions
+		}
+		if (x1 == 0) {
+			return 0;
+		}
+		
+		boolean isNegative = (x1 > 0 && x2 < 0) || (x1 < 0 && x2 > 0);
+		
+		// Use absolute values
+		int absX1 = (x1 > 0) ? x1 : minus(0, x1);
+		int absX2 = (x2 > 0) ? x2 : minus(0, x2);
+
 		int quotient = 0;
-		int remainder = x1;
-		while (remainder >= x2) {
-			remainder = minus(remainder, x2);
+		while (absX1 >= absX2) {
+			absX1 = minus(absX1, absX2);
 			quotient++;
 		}
-		return quotient;
+		
+		if (isNegative) {
+			return minus(0, quotient);
+		} else {
+			return quotient;
+		}
 	}
 
 	// Returns x1 % x2
 	public static int mod(int x1, int x2) {
-		// Assuming x1 >= 0 and x2 > 0
-		// Remainder = x1 - (div(x1, x2) * x2)
 		int quotient = div(x1, x2);
 		int product = times(quotient, x2);
 		int remainder = minus(x1, product);
@@ -85,9 +117,7 @@ public class Algebra {
 
 	// Returns the integer part of sqrt(x) 
 	public static int sqrt(int x) {
-		// Assuming x >= 0
 		int root = 0;
-		// Find the largest integer 'root' such that (root + 1)^2 <= x
 		while (times(plus(root, 1), plus(root, 1)) <= x) {
 			root++;
 		}

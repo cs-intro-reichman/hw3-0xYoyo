@@ -9,11 +9,6 @@ public class LoanCalc {
     // interest rate (double, as a percentage), and number of payments (int).  
 	public static void main(String[] args) {	
 
-		// These next 3 lines are for self testing and needs to be commented out 
-		System.out.println("Testing the endBalance function...");
-		double finalBalance = endBalance(100000, 5, 10, 12333);
-		System.out.println("\n--- The final balance is: " + finalBalance + " ---");
-
 		// Gets the loan data
 		double loan = Double.parseDouble(args[0]);
 		double rate = Double.parseDouble(args[1]);
